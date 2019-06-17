@@ -1,0 +1,23 @@
+{
+	"name": "SourceDataset_g77",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase_Streaming",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_tableName": {
+				"type": "String"
+			}
+		},
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": {
+				"value": "@dataset().cw_tableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

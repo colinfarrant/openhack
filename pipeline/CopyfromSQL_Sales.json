@@ -1,0 +1,115 @@
+{
+	"name": "CopyfromSQL_Sales",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_vws",
+				"type": "ForEach",
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.cw_items",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy_vws",
+							"type": "Copy",
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "@{item().source.tableName}"
+								},
+								{
+									"name": "Destination",
+									"value": "/@{item().destination.fileName}"
+								}
+							],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource"
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSetting"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSetting",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false
+							},
+							"inputs": [
+								{
+									"referenceName": "SourceDataset_vws",
+									"type": "DatasetReference",
+									"parameters": {
+										"cw_tableName": "@item().source.tableName"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DestinationDataset_vws",
+									"type": "DatasetReference",
+									"parameters": {
+										"cw_fileName": "@item().destination.fileName"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"cw_items": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"source": {
+							"tableName": "[dbo].[Addresses]"
+						},
+						"destination": {
+							"fileName": "Addresses.txt"
+						}
+					},
+					{
+						"source": {
+							"tableName": "[dbo].[Customers]"
+						},
+						"destination": {
+							"fileName": "Customers.txt"
+						}
+					},
+					{
+						"source": {
+							"tableName": "[dbo].[OrderDetails]"
+						},
+						"destination": {
+							"fileName": "OrderDetails.txt"
+						}
+					},
+					{
+						"source": {
+							"tableName": "[dbo].[Orders]"
+						},
+						"destination": {
+							"fileName": "Orders.txt"
+						}
+					}
+				]
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

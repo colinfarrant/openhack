@@ -1,0 +1,19 @@
+{
+	"name": "AzureDataLakeStorageFile1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureBlobFSFile",
+		"typeProperties": {
+			"format": {
+				"type": "JsonFormat",
+				"filePattern": "setOfObjects"
+			},
+			"fileName": "CosmosDB.json",
+			"folderPath": "team3datalakeroot/CosmosDBInput"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

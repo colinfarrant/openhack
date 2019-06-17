@@ -1,0 +1,23 @@
+{
+	"name": "SourceDataset_k9o",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "VanArdelSQL",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"cw_tableName": {
+				"type": "String"
+			}
+		},
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"tableName": {
+				"value": "@dataset().cw_tableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

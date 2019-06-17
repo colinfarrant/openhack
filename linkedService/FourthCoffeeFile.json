@@ -1,0 +1,16 @@
+{
+	"name": "FourthCoffeeFile",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "C:\\Rentals",
+			"userId": "openhackadmin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4MjFjZDg1Yi1jNTc1LTQ5ZTMtYjgyZC0xNDZkYTU4OTM5ZGMiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "FourthCoffee",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
