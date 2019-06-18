@@ -55,7 +55,7 @@ fcomm.createOrReplaceTempView("FCOnlineMovieMappings")
 # COMMAND ----------
 
 # Add a unique ID
-fcmm_unique=spark.sql("select 3 as SourceID,  uuid() as CatalogID,  Category as Genre, Rating as Rating, to_date(concat(right(ReleaseDate,4),'-',left(ReleaseDate,5))) as AvailabilityDate,  null as MovieTier, FCMoviesRaw.MovieTitle as MovieTitle, coalesce(OnlineMovieID,   FCMoviesRaw.MovieID) as MovieID   from FCMoviesRaw left join FCOnlineMovieMappings on FCMoviesRaw.MovieID = FCOnlineMovieMappings.MovieID")
+fcmm_unique=spark.sql("select 3 as SourceID,  uuid() as CatalogID,  Category as Genre, Rating as Rating, to_date(concat(right(ReleaseDate,4),'-',left(ReleaseDate,5))) as AvailabilityDate,  cast(null as int) as MovieTier, FCMoviesRaw.MovieTitle as MovieTitle, coalesce(OnlineMovieID,   FCMoviesRaw.MovieID) as MovieID   from FCMoviesRaw left join FCOnlineMovieMappings on FCMoviesRaw.MovieID = FCOnlineMovieMappings.MovieID")
 
 # COMMAND ----------
 
@@ -96,7 +96,7 @@ vaomm.createOrReplaceTempView("VAOnlineMovieMappings")
 # COMMAND ----------
 
 # Add a unique ID
-vamm_unique=spark.sql("select 2 as SourceID,  uuid() as CatalogID,  Category as Genre, Rating as Rating, to_date(concat(right(ReleaseDate,4),'-',left(ReleaseDate,5))) as AvailabilityDate,  null as MovieTier, VAMoviesRaw.MovieTitle as MovieTitle, coalesce(OnlineMovieID,   VAMoviesRaw.MovieID) as MovieID   from VAMoviesRaw left join VAOnlineMovieMappings on VAMoviesRaw.MovieID = VAOnlineMovieMappings.MovieID")
+vamm_unique=spark.sql("select 2 as SourceID,  uuid() as CatalogID,  Category as Genre, Rating as Rating, to_date(concat(right(ReleaseDate,4),'-',left(ReleaseDate,5))) as AvailabilityDate,  cast(null as int) as MovieTier, VAMoviesRaw.MovieTitle as MovieTitle, coalesce(OnlineMovieID,   VAMoviesRaw.MovieID) as MovieID   from VAMoviesRaw left join VAOnlineMovieMappings on VAMoviesRaw.MovieID = VAOnlineMovieMappings.MovieID")
 
 # COMMAND ----------
 
@@ -119,3 +119,23 @@ finalCatalog=spark.sql("select SourceID, CatalogID, ActorID, Actor, ReleaseDate,
 
 finalCatalog.coalesce(1)
 finalCatalog.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/Catalog.csv')
+
+
+# COMMAND ----------
+
+finalVanArsdel.coalesce(1)
+finalVanArsdel.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/VanArsdelCatalog.csv')
+
+
+# COMMAND ----------
+
+finalFirstCoffee.coalesce(1)
+finalFirstCoffee.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/FourthCoffeeCatalog.csv')
+
+# COMMAND ----------
+
+finalSouthridge.coalesce(1)
+finalSouthridge.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/SouthridgeCatalog.csv')
+
+# COMMAND ----------
+
