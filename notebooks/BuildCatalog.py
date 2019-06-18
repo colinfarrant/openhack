@@ -13,10 +13,6 @@ srm.createOrReplaceTempView("SVmoviesRaw")
 
 # COMMAND ----------
 
-
-
-# COMMAND ----------
-
 # Add a unique ID
 srm_unique=spark.sql("select 1 as SourceID,  uuid() as CatalogId, id as SourceSystemMovieId, id as SouthridgeMovieId, actors, to_date(AvailabilityDate) as ReleaseDate , genre as Genre, rating as Rating, cast(releaseYear as int) as AvailabilityYear,  to_date(streamingAvailabilityDate) as AvailabilityDate, cast(tier as int) as MovieTier, title as MovieTitle ,id as MovieID,cast(runtime as int) as RuntimeMinutes  from SVmoviesRaw")
 
@@ -24,7 +20,7 @@ srm_unique=spark.sql("select 1 as SourceID,  uuid() as CatalogId, id as SourceSy
 
 #Explode out actor names
 srm_exploded = srm_unique.withColumn('actors', explode('actors'))
-display(srm_exploded)
+#display(srm_exploded)
 
 # COMMAND ----------
 
@@ -33,15 +29,11 @@ srm_exploded.createOrReplaceTempView("SVmovies")
 
 # COMMAND ----------
 
-finalSouthridge=spark.sql("select SourceID,  CatalogID, '' as ActorID, actors.name as ActorName, ReleaseDate,Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID  from SVmovies")
+finalSouthridge=spark.sql("select SourceID,  CatalogID, '' as ActorID, actors.name as Actor, ReleaseDate,Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID  from SVmovies")
 
 # COMMAND ----------
 
 finalSouthridge.createOrReplaceTempView("SRFinal")
-
-# COMMAND ----------
-
-# MAGIC %sql select * from SV_Out
 
 # COMMAND ----------
 
@@ -79,7 +71,7 @@ fcmm_unique.createOrReplaceTempView("FCMovies")
 
 # COMMAND ----------
 
-finalFirstCoffee=spark.sql("select SourceID, CatalogID, FCActors.ActorID, ActorName as Actor, AvailabilityDate as ReleaseDate, Genre, Rating, Year(AvailabilityDate) as AvailibilityYear, AvailabilityDate,  MovieTier,MovieTitle, FCMovies.MovieID from FCMovies inner join FCMovieActorMapping on FCMovies.MovieID = FCMovieActorMapping.MovieID inner join FCActors on FCActors.ActorID = FCMovieActorMapping.ActorID")
+finalFirstCoffee=spark.sql("select SourceID, CatalogID, FCActors.ActorID, ActorName as Actor, AvailabilityDate as ReleaseDate, Genre, Rating, Year(AvailabilityDate) as AvailabilityYear, AvailabilityDate,  MovieTier,MovieTitle, FCMovies.MovieID from FCMovies inner join FCMovieActorMapping on FCMovies.MovieID = FCMovieActorMapping.MovieID inner join FCActors on FCActors.ActorID = FCMovieActorMapping.ActorID")
 
 # COMMAND ----------
 
@@ -112,7 +104,7 @@ vamm_unique.createOrReplaceTempView("VAMovies")
 
 # COMMAND ----------
 
-finalVanArsdel=spark.sql("select SourceID, CatalogID, VAActors.ActorID, ActorName as Actor, AvailabilityDate as ReleaseDate, Genre, Rating, Year(AvailabilityDate) as AvailibilityYear, AvailabilityDate,  MovieTier,MovieTitle, VAMovies.MovieID from VAMovies inner join VAMovieActorMapping on VAMovies.MovieID = VAMovieActorMapping.MovieID inner join VAActors on VAActors.ActorID = VAMovieActorMapping.ActorID")
+finalVanArsdel=spark.sql("select SourceID, CatalogID, VAActors.ActorID, ActorName as Actor, AvailabilityDate as ReleaseDate, Genre, Rating, Year(AvailabilityDate) as AvailabilityYear, AvailabilityDate,  MovieTier,MovieTitle, VAMovies.MovieID from VAMovies inner join VAMovieActorMapping on VAMovies.MovieID = VAMovieActorMapping.MovieID inner join VAActors on VAActors.ActorID = VAMovieActorMapping.ActorID")
 
 # COMMAND ----------
 
@@ -120,76 +112,9 @@ finalVanArsdel.createOrReplaceTempView("VAFinal")
 
 # COMMAND ----------
 
-# MAGIC %sql select * from VAFinal union select * from FCFinal union select * from SRFinal
+finalCatalog=spark.sql("select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from VAFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from FCFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from SRFinal")
 
 # COMMAND ----------
 
-# MAGIC %sql select SourceID, CatalogID, FCActors.ActorID, ActorName as Actor, AvailabilityDate as ReleaseDate, Genre, Rating, Year(AvailabilityDate) as AvailibilityYear, AvailabilityDate,  MovieTier,MovieTitle, FCMovies.MovieID from FCMovies inner join FCMovieActorMapping on FCMovies.MovieID = FCMovieActorMapping.MovieID inner join FCActors on FCActors.ActorID = FCMovieActorMapping.ActorID
-
-# COMMAND ----------
-
-fcm_unique=spark.sql("select 2 as SourceSystemId,  uuid() as CatalogId, MovieID as SourceSystemMovieId, 222 as SouthridgeMovieId, actors,  MovieTitle as Title, Category as Genre, Rating as Rating, cast(RunTimeMin as int) as RuntimeMinutes, cast(releaseYear as int) as TheatricalReleaseYear, to_date(ReleaseDate) as PhysicalAvailabilityDate,   from FCMoviesRaw")
-
-# COMMAND ----------
-
-
-
-# COMMAND ----------
-
-# MAGIC %sql select count(*) from (select distinct FCMovies.MovieID, FCActors.ActorID, FCActors.ActorName, FCActors.Gender from FCMovies
-# MAGIC inner join FCMovieActors on FCMovies.MovieID = FCMovieActors.MovieID 
-# MAGIC inner join FCActors on FCActors.ActorID = FCMovieActors.ActorID)
-
-# COMMAND ----------
-
-# MAGIC %sql select distinct count(*) from 
-
-# COMMAND ----------
-
-# MAGIC %sql select count(*) from FCMovies where not exists (select * from FCMovieActors where FCMovieActors.MovieID=FCMovies.MovieID )
-
-# COMMAND ----------
-
-# MAGIC %sql select count(*) from FCMovieActors where not exists (select * from FCMovies where FCMovieActors.MovieID=FCMovies.MovieID )
-
-# COMMAND ----------
-
-# MAGIC %sql select count(*) from FCMovies where not exists (select * from FCMovieActors where FCMovieActors.MovieID=FCMovies.MovieID )
-
-# COMMAND ----------
-
-# MAGIC %sql select 1 as SourceSystemId,  uuid() as CatalogId, id as SourceSystemMovieId, id as SouthridgeMovieId, actors as ActorName, ' ' as ActorGender, 
-# MAGIC title as Title, genre as Genre, rating as Rating, runtime as RuntimeMinutes, releaseYear as TheatricalReleaseYear, availabilityDate as PhysicalAvailabilityDate, streamingAvailabilityDate as  StreamingAvailabilityDate  from SVmovies 
-
-# COMMAND ----------
-
-srm_exploded = srm.withColumn('actors', explode('actors'))
-display(srm_exploded)
-
-# COMMAND ----------
-
-srm_exploded.createOrReplaceTempView("SVmovies")
-
-# COMMAND ----------
-
-#Get unique
-%sql select distinct uuid() as CatalogId, id as SourceSystemMovieId, id as SouthridgeMovieId 
-newts=spark.sql("select distinct uuid() as CatalogId, id as SourceSystemMovieId, id as SouthridgeMovieId")
-
-# COMMAND ----------
-
-# MAGIC %sql select 1 as SourceSystemId,  uuid() as CatalogId
-# MAGIC ,_attachments, _etag, _rid, _self, _ts, actors.name,availabilityDate, genre,id, rating releaseYear, runtime, streamingAvailabilityDate, tier, title from SVmovies 
-
-# COMMAND ----------
-
-df2 = spark.read.csv("abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/SQLInputSales/Customers.txt", header = True)
-
-# COMMAND ----------
-
-from pyspark.sql.functions import arrays_zip, col
-
-(df
-    .withColumn("tmp", arrays_zip("b", "c"))
-    .withColumn("tmp", explode("tmp"))
-    .select("a", col("tmp.b"), col("tmp.c"), "d"))
+finalCatalog.coalesce(1)
+finalCatalog.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/Catalog.csv')
