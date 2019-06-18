@@ -100,6 +100,7 @@ vamm_unique=spark.sql("select 2 as SourceID,  uuid() as CatalogID,  Category as 
 
 # COMMAND ----------
 
+##
 vamm_unique.createOrReplaceTempView("VAMovies")
 
 # COMMAND ----------
