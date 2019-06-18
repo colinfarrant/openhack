@@ -113,29 +113,29 @@ finalVanArsdel.createOrReplaceTempView("VAFinal")
 
 # COMMAND ----------
 
-finalCatalog=spark.sql("select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from VAFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from FCFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from SRFinal")
+#finalCatalog=spark.sql("select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from VAFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from FCFinal union select SourceID, CatalogID, ActorID, Actor, ReleaseDate, Genre, Rating, AvailabilityYear, AvailabilityDate, MovieTier, MovieTitle, MovieID from SRFinal")
 
 # COMMAND ----------
 
-finalCatalog.coalesce(1)
-finalCatalog.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/Catalog.csv')
+#finalCatalog.coalesce(1)
+#finalCatalog.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/Catalog.csv')
 
 
 # COMMAND ----------
 
 finalVanArsdel.coalesce(1)
-finalVanArsdel.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/VanArsdelCatalog.csv')
+finalVanArsdel.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/VanArsdel/Catalog.csv')
 
 
 # COMMAND ----------
 
 finalFirstCoffee.coalesce(1)
-finalFirstCoffee.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/FourthCoffeeCatalog.csv')
+finalFirstCoffee.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/FourthCoffee/Catalog.csv')
 
 # COMMAND ----------
 
 finalSouthridge.coalesce(1)
-finalSouthridge.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/SouthridgeCatalog.csv')
+finalSouthridge.write.format("csv").mode('overwrite').option("header", "true").save('abfss://team3datalakeroot@team3openhack.dfs.core.windows.net/OutputCSVs/Southridge/Catalog.csv')
 
 # COMMAND ----------
 
