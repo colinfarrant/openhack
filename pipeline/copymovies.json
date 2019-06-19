@@ -45,7 +45,7 @@
 							{
 								"source": {
 									"name": "SourceID",
-									"type": "String"
+									"type": "Int16"
 								},
 								"sink": {
 									"name": "MovieSK",
