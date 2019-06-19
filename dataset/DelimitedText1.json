@@ -9,6 +9,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": "part-00000.csv",
 				"folderPath": "OutputCSVs/CustomersCombine.csv",
 				"container": "team3datalakeroot"
 			},
