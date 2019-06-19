@@ -1,0 +1,269 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory Name",
+			"defaultValue": "Team3ADF"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "RunRentalsDataFlow",
+						"type": "ExecuteDataFlow",
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "Rentals",
+								"type": "DataFlowReference"
+							}
+						}
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/Rentals')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/FourthCoffeeTransactions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Transactions.csv",
+						"folderPath": "FolderFourthCoffeeInput",
+						"container": "team3datalakeroot"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "TransactionID",
+						"type": "String"
+					},
+					{
+						"name": "CustomerID",
+						"type": "String"
+					},
+					{
+						"name": "MovieID",
+						"type": "String"
+					},
+					{
+						"name": "RentalDate",
+						"type": "String"
+					},
+					{
+						"name": "ReturnDate",
+						"type": "String"
+					},
+					{
+						"name": "RentalCost",
+						"type": "String"
+					},
+					{
+						"name": "LateFee",
+						"type": "String"
+					},
+					{
+						"name": "RewindFlag",
+						"type": "String"
+					},
+					{
+						"name": "CreatedDate",
+						"type": "String"
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "String"
+					}
+				]
+			}
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/RentalsSink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "Sink",
+						"container": "team3datalakeroot"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			}
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/VanArsdelTransactions')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Transactions.txt",
+						"folderPath": "SQLVanArsdellInput",
+						"container": "team3datalakeroot"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "TransactionID",
+						"type": "String"
+					},
+					{
+						"name": "CustomerID",
+						"type": "String"
+					},
+					{
+						"name": "MovieID",
+						"type": "String"
+					},
+					{
+						"name": "RentalDate",
+						"type": "String"
+					},
+					{
+						"name": "ReturnDate",
+						"type": "String"
+					},
+					{
+						"name": "RentalCost",
+						"type": "String"
+					},
+					{
+						"name": "LateFee",
+						"type": "String"
+					},
+					{
+						"name": "RewindFlag",
+						"type": "String"
+					},
+					{
+						"name": "CreatedDate",
+						"type": "String"
+					},
+					{
+						"name": "UpdatedDate",
+						"type": "String"
+					}
+				]
+			}
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Rentals')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "VanArsdelTransactions",
+								"type": "DatasetReference"
+							},
+							"name": "VanArsdelTransactions",
+							"script": "source(output(\n\t\tTransactionID as string,\n\t\tCustomerID as string,\n\t\tMovieID as string,\n\t\tRentalDate as string,\n\t\tReturnDate as string,\n\t\tRentalCost as string,\n\t\tLateFee as string,\n\t\tRewindFlag as string,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> VanArsdelTransactions"
+						},
+						{
+							"dataset": {
+								"referenceName": "FourthCoffeeTransactions",
+								"type": "DatasetReference"
+							},
+							"name": "FourthCoffeeTransactions",
+							"script": "source(output(\n\t\tTransactionID as string,\n\t\tCustomerID as string,\n\t\tMovieID as string,\n\t\tRentalDate as string,\n\t\tReturnDate as string,\n\t\tRentalCost as double,\n\t\tLateFee as double,\n\t\tRewindFlag as boolean,\n\t\tCreatedDate as string,\n\t\tUpdatedDate as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false) ~> FourthCoffeeTransactions"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "RentalsSink",
+								"type": "DatasetReference"
+							},
+							"name": "VARentalsSink",
+							"script": "VADerivedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['VA_RentalsSink.csv']) ~> VARentalsSink"
+						},
+						{
+							"dataset": {
+								"referenceName": "RentalsSink",
+								"type": "DatasetReference"
+							},
+							"name": "FCRentalsSink",
+							"script": "FCDerivedColumns sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tpartitionFileNames:['FC_RentalsSink.csv']) ~> FCRentalsSink"
+						}
+					],
+					"transformations": [
+						{
+							"name": "VASourceId",
+							"script": "VanArsdelTransactions derive(SourceId = 2) ~> VASourceId"
+						},
+						{
+							"name": "VADerivedColumns",
+							"script": "VASourceId derive(UniqueTransactionID = concat(toString(SourceId),'-', TransactionID),\n\t\tUniqueCustomerID = concat(toString(SourceId),'-', CustomerID),\n\t\tUniqueMovieID = concat(toString(SourceId),'-', MovieID),\n\t\tCreatedDate = toTimestamp(CreatedDate),\n\t\tUpdatedDate = toTimestamp(UpdatedDate),\n\t\tRewindFlag = toBoolean(RewindFlag),\n\t\tLateFee = toDouble(LateFee),\n\t\tRentalCost = toDouble(RentalCost),\n\t\tReturnDate = toTimestamp(ReturnDate, 'yyyyMMdd'),\n\t\tRentalDate = toTimestamp(RentalDate, 'yyyyMMdd')) ~> VADerivedColumns"
+						},
+						{
+							"name": "FCSourceId",
+							"script": "FourthCoffeeTransactions derive(SourceId = 3) ~> FCSourceId"
+						},
+						{
+							"name": "FCDerivedColumns",
+							"script": "FCSourceId derive(UniqueTransactionID = concat(toString(SourceId), '-', TransactionID),\n\t\tUniqueCustomerID = concat(toString(SourceId), '-', CustomerID),\n\t\tUniqueMovieId = concat(toString(SourceId), '-',MovieID),\n\t\tCreatedDate = toTimestamp(CreatedDate),\n\t\tUpdatedDate = toTimestamp(UpdatedDate),\n\t\tReturnDate = toTimestamp(ReturnDate, 'yyyyMMdd'),\n\t\tRentalDate = toTimestamp(RentalDate, 'yyyyMMdd')) ~> FCDerivedColumns"
+						}
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/VanArsdelTransactions')]",
+				"[concat(variables('factoryId'), '/datasets/FourthCoffeeTransactions')]",
+				"[concat(variables('factoryId'), '/datasets/RentalsSink')]"
+			]
+		}
+	]
+}

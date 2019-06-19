@@ -1,0 +1,39 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Team3ADF"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase_Streaming_connectionString": {
+			"value": ""
+		},
+		"CosmosDb1_connectionString": {
+			"value": ""
+		},
+		"FourthCoffeeFile_password": {
+			"value": ""
+		},
+		"VanArdelSQL_connectionString": {
+			"value": ""
+		},
+		"AzureDataLakeStorageFile1_properties_typeProperties_fileName": {
+			"value": "CosmosDB.json"
+		},
+		"AzureDataLakeStorageFile1_properties_typeProperties_folderPath": {
+			"value": "team3datalakeroot/CosmosDBInput"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://team3openhack.dfs.core.windows.net"
+		},
+		"FourthCoffeeFile_properties_typeProperties_userId": {
+			"value": "openhackadmin"
+		}
+	}
+}
