@@ -44,32 +44,31 @@
 						"mappings": [
 							{
 								"source": {
+									"name": "SourceID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieSK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "MovieID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieID"
+								}
+							},
+							{
+								"source": {
 									"name": "MovieTitle",
 									"type": "String"
 								},
 								"sink": {
 									"name": "MovieTitle",
 									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Genre",
-									"type": "String"
-								},
-								"sink": {
-									"name": "MovieCategorySK",
-									"type": "Byte"
-								}
-							},
-							{
-								"source": {
-									"name": "Rating",
-									"type": "String"
-								},
-								"sink": {
-									"name": "MovieRatingSK",
-									"type": "Byte"
 								}
 							}
 						]
