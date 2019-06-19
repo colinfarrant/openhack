@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "CopySalesOrders",
+				"name": "CopyCustomers",
 				"type": "Copy",
 				"policy": {
 					"timeout": "7.00:00:00",
@@ -31,7 +31,131 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": false
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SourceID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CustomerSK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "CustomerID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "CustomerID"
+								}
+							},
+							{
+								"source": {
+									"name": "LastName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "LastName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "FirstName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "FirstName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AddressLine1",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AddressLine1",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "AddressLine2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AddressLine2",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "City",
+									"type": "String"
+								},
+								"sink": {
+									"name": "City",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "State",
+									"type": "String"
+								},
+								"sink": {
+									"name": "State",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ZipCode",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ZipCode",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "PhoneNumber",
+									"type": "String"
+								},
+								"sink": {
+									"name": "PhoneNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "CreatedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RecordStartDate",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "UpdatedDate",
+									"type": "String"
+								},
+								"sink": {
+									"name": "RecordEndDate",
+									"type": "DateTime"
+								}
+							}
+						]
+					}
 				},
 				"inputs": [
 					{
