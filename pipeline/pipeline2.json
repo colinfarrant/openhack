@@ -16,7 +16,10 @@
 					"source": {
 						"type": "DelimitedTextSource",
 						"storeSettings": {
-							"type": "AzureBlobFSReadSetting"
+							"type": "AzureBlobFSReadSetting",
+							"recursive": true,
+							"wildcardFileName": "*.csv",
+							"enablePartitionDiscovery": false
 						},
 						"formatSettings": {
 							"type": "DelimitedTextReadSetting"
@@ -31,7 +34,13 @@
 							"useTypeDefault": true
 						}
 					},
-					"enableStaging": false,
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureBlobStorage1",
+							"type": "LinkedServiceReference"
+						}
+					},
 					"translator": {
 						"type": "TabularTranslator",
 						"mappings": [
@@ -137,7 +146,7 @@
 							{
 								"source": {
 									"name": "CreatedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "RecordStartDate",
@@ -147,7 +156,7 @@
 							{
 								"source": {
 									"name": "UpdatedDate",
-									"type": "String"
+									"type": "DateTime"
 								},
 								"sink": {
 									"name": "RecordEndDate",
