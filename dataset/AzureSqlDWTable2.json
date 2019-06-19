@@ -1,0 +1,43 @@
+{
+	"name": "AzureSqlDWTable2",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDW1",
+			"type": "LinkedServiceReference"
+		},
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "MovieSK",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "MovieID",
+				"type": "uniqueidentifier"
+			},
+			{
+				"name": "MovieTitle",
+				"type": "varchar"
+			},
+			{
+				"name": "MovieCategorySK",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "MovieRatingSK",
+				"type": "tinyint",
+				"precision": 3
+			},
+			{
+				"name": "MovieRunTimeMin",
+				"type": "smallint",
+				"precision": 5
+			}
+		],
+		"typeProperties": {
+			"tableName": "[dbo].[DimMovies]"
+		}
+	}
+}

@@ -1,0 +1,112 @@
+{
+	"name": "copymovies",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy Data1",
+				"type": "Copy",
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSetting",
+							"wildcardFileName": "*.*"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSetting"
+						}
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						}
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "AzureBlobStorage1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "SourceID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieSK",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "MovieID",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieID"
+								}
+							},
+							{
+								"source": {
+									"name": "MovieTitle",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieTitle",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Genre",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieCategorySK",
+									"type": "Byte"
+								}
+							},
+							{
+								"source": {
+									"name": "Rating",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MovieRatingSK",
+									"type": "Byte"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "MovieCatalogue",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlDWTable2",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		]
+	}
+}
