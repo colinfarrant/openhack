@@ -146,7 +146,8 @@
 							{
 								"source": {
 									"name": "CreatedDate",
-									"type": "DateTime"
+									"type": "String",
+									"format": "Format: YYYY-MM-DD HH:MM:"
 								},
 								"sink": {
 									"name": "RecordStartDate",
@@ -156,7 +157,7 @@
 							{
 								"source": {
 									"name": "UpdatedDate",
-									"type": "DateTime"
+									"type": "String"
 								},
 								"sink": {
 									"name": "RecordEndDate",
