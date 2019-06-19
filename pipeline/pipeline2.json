@@ -142,26 +142,6 @@
 									"name": "PhoneNumber",
 									"type": "String"
 								}
-							},
-							{
-								"source": {
-									"name": "CreatedDate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "RecordStartDate",
-									"type": "DateTime"
-								}
-							},
-							{
-								"source": {
-									"name": "UpdatedDate",
-									"type": "String"
-								},
-								"sink": {
-									"name": "RecordEndDate",
-									"type": "DateTime"
-								}
 							}
 						]
 					}
